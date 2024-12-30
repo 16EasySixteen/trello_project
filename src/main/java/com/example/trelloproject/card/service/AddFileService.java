@@ -1,6 +1,5 @@
 package com.example.trelloproject.card.service;
 
-import com.example.trelloproject.card.dto.addFile.AddFileRequestDto;
 import com.example.trelloproject.card.dto.addFile.AddFileResponseDto;
 import com.example.trelloproject.card.entity.AddFile;
 import com.example.trelloproject.card.entity.Card;
@@ -19,7 +18,6 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -43,21 +41,22 @@ public class AddFileService{
     /**
      * 파일 업로드 메서드
      */
+    @Transactional
     public AddFileResponseDto uploadFiles(Long cardId, MultipartFile multipartFile) throws IOException {
-        // 1. 카드 조회
+        //카드 조회
         Card findCard = cardRepository.findById(cardId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "카드를 찾을 수 없습니다."));
 
-        // 2. 고유 파일 이름 생성
+        //고유 파일 이름 생성
         String fileName = generateUniqueFileName(multipartFile.getOriginalFilename());
 
-        // 3. S3에 파일 업로드
+        //S3에 파일 업로드
         uploadToS3(multipartFile, fileName);
 
-        // 4. S3 URL 생성
+        //S3 URL 생성
         String fileUrl = generateFileUrl(fileName);
 
-        // 5. AddFileResponseDto 반환
+        //생성자 주입
         AddFile addFile = new AddFile(multipartFile.getOriginalFilename(), fileName, fileUrl, multipartFile.getContentType(), multipartFile.getSize(), findCard);
 
         log.info(fileUrl);
@@ -68,7 +67,9 @@ public class AddFileService{
                 addFile.getId(),
                 addFile.getFilePath(),
                 addFile.getOriginalFileName(),
-                addFile.getFileType()
+                addFile.getFileType(),
+                addFile.getCreatedAt(),
+                addFile.getUpdatedAt()
         );
     }
 
@@ -105,7 +106,6 @@ public class AddFileService{
         return "image/" + UUID.randomUUID().toString() + extension;
     }
 
-
     @Transactional
     public List<AddFileResponseDto> findFiles(Long cardId) {
         Card card = cardRepository.findById(cardId)
@@ -116,7 +116,9 @@ public class AddFileService{
                         file.getId(),
                         file.getFilePath(),
                         file.getOriginalFileName(),
-                        file.getFileType()
+                        file.getFileType(),
+                        file.getCreatedAt(),
+                        file.getUpdatedAt()
                 ))
                 .collect(Collectors.toList());
     }

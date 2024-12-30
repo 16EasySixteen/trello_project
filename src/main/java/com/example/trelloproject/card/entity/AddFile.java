@@ -1,12 +1,13 @@
 package com.example.trelloproject.card.entity;
 
+import com.example.trelloproject.common.entity.CreateAndUpdateDateEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
 @Getter
 @Table(name = "add_file")
-public class AddFile {
+public class AddFile extends CreateAndUpdateDateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +21,7 @@ public class AddFile {
     @Column(nullable = false)
     private String savedFileName;
 
-    @Column
+    @Column(nullable = false)
     private String filePath;
 
     @Column(nullable = false)
@@ -35,9 +36,7 @@ public class AddFile {
     private Card card;
 
 
-    public AddFile() {
-
-    }
+    public AddFile() {}
 
     public AddFile(String originalFileName, String savedFileName, String filePath, String fileType, Long fileSize, Card card) {
         this.originalFileName = originalFileName;

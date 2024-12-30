@@ -8,12 +8,10 @@ import com.example.trelloproject.card.dto.cardFind.CardSearchResponseDto;
 import com.example.trelloproject.card.dto.cardUpdate.CardUpdateRequestDto;
 import com.example.trelloproject.card.dto.cardUpdate.CardUpdateResponseDto;
 import com.example.trelloproject.card.entity.Card;
-import com.example.trelloproject.card.entity.Manager;
 import com.example.trelloproject.card.repository.CardRepository;
 import com.example.trelloproject.emoji.dto.EmojiFindResponseDto;
 import com.example.trelloproject.list.entity.BoardList;
 import com.example.trelloproject.list.repository.ListRepository;
-import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.user.repository.UserRepository;
 import com.example.trelloproject.comment.dto.CommentFindResponseDto;
 import com.example.trelloproject.comment.entity.Comment;
@@ -23,6 +21,7 @@ import com.example.trelloproject.emoji.repository.EmojiRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -41,6 +40,7 @@ public class CardServiceImpl implements CardService {
 
 
     @Override
+    @Transactional
     public CardCreateResponseDto createCard(Long listId, CardCreateRequestDto cardCreateRequestDto) {
 
         BoardList boardList = listRepository.findById(listId).orElseThrow(
@@ -58,12 +58,14 @@ public class CardServiceImpl implements CardService {
         return new CardCreateResponseDto(savedCard.getId(),
                 savedCard.getTitle(),
                 savedCard.getDescription(),
-                savedCard.getEndAt()
-
+                savedCard.getEndAt(),
+                savedCard.getCreatedAt(),
+                savedCard.getUpdatedAt()
         );
     }
 
     @Override
+    @Transactional
     public CardUpdateResponseDto updateCard(Long cardId, CardUpdateRequestDto cardUpdateRequestDto) {
 
         Card findCard = cardRepository.findById(cardId)
@@ -74,14 +76,22 @@ public class CardServiceImpl implements CardService {
         findCard.setEndAt(cardUpdateRequestDto.getNewEndAt());
 
         Card updatedCard = cardRepository.save(findCard);
-        return new CardUpdateResponseDto(updatedCard.getId(), updatedCard.getTitle(), updatedCard.getDescription(), updatedCard.getEndAt());
+        return new CardUpdateResponseDto(
+                updatedCard.getId(),
+                updatedCard.getTitle(),
+                updatedCard.getDescription(),
+                updatedCard.getEndAt(),
+                updatedCard.getUpdatedAt()
+        );
     }
 
     @Override
+    @Transactional
     public CardFindOneResponseDto getCard(Long cardId) {
 
         Card findCard = cardRepository.findById(cardId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "card doesn't exist"));
+
 
         List<Comment> allComments = commentRepository.findByCard(findCard);
         List<CommentFindResponseDto> comments = new ArrayList<>();
@@ -104,9 +114,11 @@ public class CardServiceImpl implements CardService {
                 findCard.getDescription(),
                 findCard.getEndAt(),
                 comments);
+
     }
 
     @Override
+    @Transactional
     public void deleteCard(Long cardId) {
         //카드 조회
         Card findCard = cardRepository.findById(cardId)
@@ -118,6 +130,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    @Transactional
     public List<CardSearchResponseDto> searchAndConvertCard(String title, String description, LocalDateTime endAt, String name, Long boardId) {
         List<Card> cards = searchCard(title, description, endAt, name, boardId) ;
         return converToDto(cards);
