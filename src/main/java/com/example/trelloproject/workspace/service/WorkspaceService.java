@@ -8,7 +8,7 @@ import java.util.List;
 public interface WorkspaceService {
     WorkspaceResponseDto createWorkspace(Authentication authentication, WorkspaceRequestDto requestDto);
 
-    List<WorkspaceFindResponseDto> getAllWorkspace();
+    List<WorkspaceFindResponseDto> getAllWorkspace(Authentication authentication);
 
     WorkspaceResponseDto updateWorkspace(Long id, WorkspaceRequestDto requestDto);
 

@@ -41,11 +41,11 @@ public class WebConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.ERROR).permitAll()
                         // ADMIN 전용 기능
-                        .requestMatchers(HttpMethod.PATCH,"/workspaces/*/invitation/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.PATCH,"/workspaces/*/invitation/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.PATCH,"/workspaces/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.DELETE,"/workspaces/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.POST,"/workspaces/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                         .requestMatchers(HttpMethod.POST,"/workspaces").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH,"/workspaces/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/workspaces/**").hasRole("ADMIN")
-
                         // 인증된 사용자 공통
                         .requestMatchers("/workspaces/**").authenticated()
                         .anyRequest().authenticated())

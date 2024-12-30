@@ -2,7 +2,7 @@ package com.example.trelloproject.board.dto;
 
 import com.example.trelloproject.S3.ImageResponseDto;
 import com.example.trelloproject.board.entity.Board;
-import com.example.trelloproject.list.dto.ListCreateResponseDto;
+import com.example.trelloproject.list.dto.ListFindResponseDto;
 import com.example.trelloproject.workspace.entity.Workspace;
 import lombok.Getter;
 
@@ -17,11 +17,11 @@ public class BoardFindResponseDto {
     private final Long workspaceId;
     private final String title;
     private final List<ImageResponseDto> images;
-    private final List<ListCreateResponseDto> lists;
+    private final List<ListFindResponseDto> lists;
     private final LocalDateTime createdAt;
     private final LocalDateTime updateAt;
 
-    public BoardFindResponseDto(Long boardId, Long workspaceId, String title, List<ImageResponseDto> images, List<ListCreateResponseDto> lists, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public BoardFindResponseDto(Long boardId, Long workspaceId, String title, List<ImageResponseDto> images, List<ListFindResponseDto> lists, LocalDateTime createdAt, LocalDateTime updateAt) {
 
         this.boardId = boardId;
         this.workspaceId = workspaceId;
@@ -42,7 +42,7 @@ public class BoardFindResponseDto {
                         .map(ImageResponseDto::toDto)
                         .collect(Collectors.toList()),
                 board.getBoardLists().stream()
-                        .map(ListCreateResponseDto::toDto)
+                        .map(ListFindResponseDto::toDto)
                         .collect(Collectors.toList()),
                 board.getCreatedAt(),
                 board.getUpdatedAt()

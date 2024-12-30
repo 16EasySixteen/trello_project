@@ -2,6 +2,7 @@ package com.example.trelloproject.card.controller;
 
 import com.example.trelloproject.card.dto.cardCreate.CardCreateRequestDto;
 import com.example.trelloproject.card.dto.cardCreate.CardCreateResponseDto;
+import com.example.trelloproject.card.dto.cardFind.CardFindOneResponseDto;
 import com.example.trelloproject.card.dto.cardFind.CardFindResponseDto;
 import com.example.trelloproject.card.dto.cardFind.CardSearchResponseDto;
 import com.example.trelloproject.card.dto.cardUpdate.CardUpdateRequestDto;
@@ -44,7 +45,7 @@ public class CardController {
 
     // 카드 단건 조회
     @GetMapping("/cards/{cardId}")
-    public ResponseEntity<CardFindResponseDto> findCard(
+    public ResponseEntity<CardFindOneResponseDto> findCard(
             @PathVariable Long cardId
     ) {
         return new ResponseEntity<>(cardService.getCard(cardId), HttpStatus.OK);

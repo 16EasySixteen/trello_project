@@ -1,7 +1,8 @@
 package com.example.trelloproject.card.entity;
 
-
 import com.example.trelloproject.common.entity.CreateAndUpdateDateEntity;
+import com.example.trelloproject.S3.Image;
+import com.example.trelloproject.comment.entity.Comment;
 import com.example.trelloproject.list.entity.BoardList;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,8 +40,8 @@ public class Card extends CreateAndUpdateDateEntity {
     private List<Manager> managers = new ArrayList<>();
 
 
-//    @OneToMany(mappedBy = "card", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-//    private List<Comment> comments;
+    @OneToMany(mappedBy = "card", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 
     public Card(){}
 

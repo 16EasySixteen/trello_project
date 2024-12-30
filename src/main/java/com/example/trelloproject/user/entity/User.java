@@ -32,6 +32,9 @@ public class User {
     @Column(nullable = false)
     private UserRole userRole;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserWorkspace> userWorkspace = new ArrayList<>();
+
     public User() {}
 
     public User(String name, String email, String password, UserRole userRole) {
@@ -40,6 +43,10 @@ public class User {
         this.password = password;
         this.userRole = userRole;
         this.userStatus = UserStatus.NORMAL;
+    }
+
+    public void updateUserStatus() {
+        this.userStatus = UserStatus.DELETED;
     }
 }
 

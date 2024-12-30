@@ -1,7 +1,13 @@
 package com.example.trelloproject.user.service;
 
-import org.springframework.stereotype.Service;
+import com.example.trelloproject.user.dto.*;
+import org.springframework.dao.DuplicateKeyException;
 
-@Service
 public interface UserService {
+
+    UserSignUpResponseDto createUser(UserSignUpRequestDto userSignUpRequestDto) throws DuplicateKeyException;
+
+    UserLoginResponseDto loginUser(UserLoginRequestDto userLoginRequestDto);
+
+    UserIdResignResponseDto resignUser(UserIdResignRequestDto userIdResignRequestDto);
 }

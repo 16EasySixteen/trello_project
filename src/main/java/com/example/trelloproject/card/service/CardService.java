@@ -2,6 +2,7 @@ package com.example.trelloproject.card.service;
 
 import com.example.trelloproject.card.dto.cardCreate.CardCreateRequestDto;
 import com.example.trelloproject.card.dto.cardCreate.CardCreateResponseDto;
+import com.example.trelloproject.card.dto.cardFind.CardFindOneResponseDto;
 import com.example.trelloproject.card.dto.cardFind.CardFindResponseDto;
 import com.example.trelloproject.card.dto.cardFind.CardSearchResponseDto;
 import com.example.trelloproject.card.dto.cardUpdate.CardUpdateRequestDto;
@@ -17,7 +18,7 @@ public interface CardService {
 
     CardUpdateResponseDto updateCard(Long cardId, CardUpdateRequestDto cardUpdateRequestDto);
 
-    CardFindResponseDto getCard(Long cardId);
+    CardFindOneResponseDto getCard(Long cardId);
 
     void deleteCard(Long cardId);
 

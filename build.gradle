@@ -54,6 +54,11 @@ dependencies {
     // s3
     implementation 'software.amazon.awssdk:s3:2.20.56'
 
+    //slack alarm
+    implementation("com.slack.api:bolt:1.31.0")
+    implementation("com.slack.api:bolt-servlet:1.31.0")
+    implementation("com.slack.api:bolt-jetty:1.31.0")
+    implementation("org.slf4j:slf4j-simple:1.7.36")
 }
 
 tasks.named('test') {

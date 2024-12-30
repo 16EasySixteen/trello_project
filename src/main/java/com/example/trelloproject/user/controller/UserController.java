@@ -23,13 +23,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthReponseDto> login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
-        JwtAuthReponseDto userLoginResponseDto = userServiceImpl.loginUser(userLoginRequestDto);
+    public ResponseEntity<UserLoginResponseDto> login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+        UserLoginResponseDto userLoginResponseDto = userServiceImpl.loginUser(userLoginRequestDto);
         return new ResponseEntity<>(userLoginResponseDto, HttpStatus.OK);
     }
 
+    @DeleteMapping("/id-resign")
+    public ResponseEntity<UserIdResignResponseDto> resign(@RequestBody UserIdResignRequestDto userIdResignRequestDto) {
+        UserIdResignResponseDto userIdResignResponseDto = userServiceImpl.resignUser(userIdResignRequestDto);
+        return new ResponseEntity<>(userIdResignResponseDto, HttpStatus.OK);
+    }
+
     @GetMapping("/auth-test")
-    public String authTest(Authentication authentication) {
-        return authentication.getPrincipal().toString();
+    public Object authTest(Authentication authentication) {
+        return authentication.getPrincipal();
     }
 }
