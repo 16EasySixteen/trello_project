@@ -1,7 +1,6 @@
 package com.example.trelloproject.card.controller;
 
 import com.example.trelloproject.S3.S3Service;
-import com.example.trelloproject.card.dto.addFile.AddFileRequestDto;
 import com.example.trelloproject.card.dto.addFile.AddFileResponseDto;
 import com.example.trelloproject.card.service.AddFileService;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cards/{cardId}/files")
+@RequestMapping("/workspaces/{workspaceId}/cards/{cardId}/files")
 public class AddFileController {
 
 
@@ -25,7 +24,6 @@ public class AddFileController {
         this.addFileService = addfileService;
         this.s3Service = s3Service;
     }
-
 
     //파일 업로드
     @PostMapping
