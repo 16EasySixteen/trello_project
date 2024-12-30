@@ -10,6 +10,7 @@ import com.example.trelloproject.list.repository.ListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ListServiceImpl implements ListService{
     private final BoardRepository boardRepository;
 
     @Override
+    @Transactional
     public ListCreateResponseDto creatList(Long workspaceId, Long boardId, ListCreateRequestDto listCreateRequestDto) {
 
         Board foundBoard = findByBoardId(boardId);
@@ -35,6 +37,7 @@ public class ListServiceImpl implements ListService{
     }
 
     @Override
+    @Transactional
     public ListCreateResponseDto updateList(Long workspaceId, Long boardId, Long listId, ListUpdateRequestDto listUpdateRequestDto) {
 
         Board foundBoard = findByBoardId(boardId);
@@ -71,6 +74,7 @@ public class ListServiceImpl implements ListService{
     }
 
     @Override
+    @Transactional
     public void deleteList(Long workspaceId, Long boardId, Long listId) {
 
         BoardList foundBoardList = findByListId(listId);
