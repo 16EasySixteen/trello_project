@@ -4,17 +4,11 @@ import com.example.trelloproject.board.dto.BoardCreateRequestDto;
 import com.example.trelloproject.board.dto.BoardCreateResponseDto;
 import com.example.trelloproject.board.dto.BoardFindResponseDto;
 import com.example.trelloproject.board.service.BoardService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,7 +21,7 @@ public class BoardController {
 
     // 보드 생성
     @PostMapping
-    public ResponseEntity<BoardCreateResponseDto> createBoard(@PathVariable Long workspaceId, @ModelAttribute BoardCreateRequestDto boardCreateRequestDto) {
+    public ResponseEntity<BoardCreateResponseDto> createBoard(@PathVariable Long workspaceId, @Valid @ModelAttribute BoardCreateRequestDto boardCreateRequestDto) {
 
         BoardCreateResponseDto createdBoard = boardService.createBoard(workspaceId, boardCreateRequestDto);
 
@@ -54,7 +48,7 @@ public class BoardController {
 
     // 보드 수정
     @PatchMapping("/{boardId}")
-    public ResponseEntity<BoardCreateResponseDto> updateBoard(@PathVariable Long workspaceId, @PathVariable Long boardId, @ModelAttribute BoardCreateRequestDto boardCreateRequestDto) {
+    public ResponseEntity<BoardCreateResponseDto> updateBoard(@PathVariable Long workspaceId, @PathVariable Long boardId, @Valid @ModelAttribute BoardCreateRequestDto boardCreateRequestDto) {
 
         BoardCreateResponseDto updatedBoard = boardService.updateBoard(workspaceId, boardId, boardCreateRequestDto);
 

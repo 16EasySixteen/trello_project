@@ -6,6 +6,7 @@ import com.example.trelloproject.common.entity.CreateAndUpdateDateEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,7 +38,7 @@ public class BoardList extends CreateAndUpdateDateEntity {
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    @OneToMany(mappedBy = "boardList", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "boardList", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cards = new ArrayList<>();
 
     public BoardList() {}

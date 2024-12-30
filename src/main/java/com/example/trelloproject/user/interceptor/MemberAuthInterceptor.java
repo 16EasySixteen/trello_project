@@ -56,7 +56,7 @@ public class MemberAuthInterceptor implements HandlerInterceptor {
             MemberRole memberRole = userWorkspace.get(0).getMemberRole();
 
             // 권한에 따라 접근여부 결정
-            if (memberRole.equals(MemberRole.MEMBER)) {
+            if (memberRole.equals(MemberRole.MEMBER) || memberRole.equals(MemberRole.WSADMIN) ) {
                 return true;
             }
             throw new ForbiddenException("접근 권한이 없습니다.");

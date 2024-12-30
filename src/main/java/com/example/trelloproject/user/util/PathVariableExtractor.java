@@ -19,7 +19,6 @@ public class PathVariableExtractor {
                 throw new IllegalArgumentException("Invalid path variable format for: " + variableName, e);
             }
         }
-
-        throw new IllegalArgumentException("Path variable '" + variableName + "' not found");
+        return 0L;
     }
 }
