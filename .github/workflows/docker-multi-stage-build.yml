@@ -60,6 +60,6 @@ jobs:
                 -e S3_REGION=${{secrets.S3_REGION}} \
                 -e S3_BUCKET_NAME=${{secrets.S3_BUCKET_NAME}} \
                 -e SLACK_BOT_TOKEN=${{secrets.SLACK_BOT_TOKEN}} \
-                -e SLACK_CHANNEL=${{secrets.SLACK_CHANNEL}} \
+                -e SLACK_CHANNEL_MONITOR=${{secrets.SLACK_CHANNEL_MONITOR}} \
                 -e JWT_SECRET=${{secrets.JWT_SECRET}} \
               ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_IMAGE_TAG_NAME }}:latest
