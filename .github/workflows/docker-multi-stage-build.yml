@@ -63,6 +63,3 @@ jobs:
                 -e SLACK_CHANNEL=${{secrets.SLACK_CHANNEL}} \
                 -e JWT_SECRET=${{secrets.JWT_SECRET}} \
               ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_IMAGE_TAG_NAME }}:latest
-            
-            # 디버깅: 컨테이너가 제대로 실행되고 환경 변수가 반영되었는지 확인
-            sudo docker logs <container_id>
