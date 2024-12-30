@@ -42,29 +42,29 @@ public class WorkspaceController {
 
     /**
      * 워크스페이스 업데이트 API
-     * @param id
+     * @param workspaceId
      * @param requestDto
      * @return
      */
-    @PatchMapping("/{id}")
+    @PatchMapping("/{workspaceId}")
     public ResponseEntity<WorkspaceResponseDto> updateWorkspace(
-            @PathVariable Long id,
+            @PathVariable Long workspaceId,
             @RequestBody WorkspaceRequestDto requestDto
     ){
-        WorkspaceResponseDto responseDto = workspaceService.updateWorkspace(id, requestDto);
+        WorkspaceResponseDto responseDto = workspaceService.updateWorkspace(workspaceId, requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     /**
      *  워크스페이스 삭제 API
-     * @param id
+     * @param workspaceId
      * @return
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{workspaceId}")
     public ResponseEntity<String> deleteWorkspace(
-            @PathVariable Long id
+            @PathVariable Long workspaceId
     ){
-        workspaceService.deleteWorkspace(id);
+        workspaceService.deleteWorkspace(workspaceId);
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 
