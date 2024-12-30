@@ -52,7 +52,7 @@ public class OnlyreadAuthInterceptor implements HandlerInterceptor {
             User user = userRepository.findByEmail(username).orElseThrow(() -> new ForbiddenException("접근 권한이 없습니다."));
 
             Long workspaceId = PathVariableExtractor.extractPathVariable(request, "workspaceId");
-            if(workspaceId.equals(0L) && "POST".equals(request.getMethod()) && user.getUserRole().equals(UserRole.ADMIN)){
+            if((workspaceId.equals(0L) && user.getUserRole().equals(UserRole.ADMIN) )|| "GET".equals(request.getMethod())){
                 return true;
             }
             List<UserWorkspace> userWorkspace = user.getUserWorkspace().stream().filter(uw -> uw.getWorkspace().getWorkspaceId().equals(workspaceId)).toList();
