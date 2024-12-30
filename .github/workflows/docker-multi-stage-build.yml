@@ -49,6 +49,9 @@ jobs:
               sudo docker stop $CONTAINER_ID
               sudo docker rm $CONTAINER_ID
             fi
+            
+            # 확인을 위한 echo 문 추가
+            echo "MYSQL_URL: ${{ secrets.MYSQL_URL }}"
 
             sudo docker pull ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKER_IMAGE_TAG_NAME }}:latest
             sudo docker run -d -p 8080:8080 \
