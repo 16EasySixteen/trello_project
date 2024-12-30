@@ -12,6 +12,7 @@ import com.example.trelloproject.workspace.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,6 +27,7 @@ public class BoardServiceImpl implements BoardService {
     private final S3Service s3Service;
 
     @Override
+    @Transactional
     public BoardCreateResponseDto createBoard(Long workspaceId, BoardCreateRequestDto boardCreateRequestDto) {
 
         Workspace foundWorkspace = findByWorkspaceId(workspaceId);
@@ -41,6 +43,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public List<BoardCreateResponseDto> findAllBoard(Long workspaceId) {
 
         List<Board> boardList = boardRepository.findAll();
@@ -49,6 +52,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public BoardFindResponseDto findBoardById(Long workspaceId, Long boardId) {
 
         Workspace foundWorkspace = findByWorkspaceId(workspaceId);
@@ -59,6 +63,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public BoardCreateResponseDto updateBoard(Long workspaceId, Long boardId, BoardCreateRequestDto boardCreateRequestDto) {
 
         Board foundBoard = findByBoardId(boardId);
@@ -83,6 +88,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void deleteBoard(Long workspaceId, Long boardId) {
 
         Board foundBoard = findByBoardId(boardId);
