@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface CardCustomRepository {
 
-    List<Card> searchCard (String title, String description, LocalDateTime endAt, String name);
+    List<Card> searchCard (String title, String description, LocalDateTime endAt, String name, Long boardId);
 }

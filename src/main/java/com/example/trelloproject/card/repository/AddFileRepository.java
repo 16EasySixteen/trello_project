@@ -10,5 +10,4 @@ import java.util.List;
 public interface AddFileRepository extends JpaRepository<AddFile, Long> {
 
     List<AddFile> findAllByCardId(Long cardId);
-
 }

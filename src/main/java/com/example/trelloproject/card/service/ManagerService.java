@@ -5,7 +5,7 @@ import com.example.trelloproject.card.dto.addManager.AddManagerResponseDto;
 
 public interface ManagerService {
 
-    AddManagerResponseDto createManager(Long cardId, Long UserId, AddManagerRequestDto addManagerRequestDto);
+    AddManagerResponseDto createManager(Long cardId, AddManagerRequestDto addManagerRequestDto);
 
     void deleteManager(Long managerId);
 }

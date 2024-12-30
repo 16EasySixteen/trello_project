@@ -4,19 +4,14 @@ package com.example.trelloproject.card.repository;
 import com.example.trelloproject.board.entity.QBoard;
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.card.entity.QCard;
-import com.example.trelloproject.user.entity.QUser;
+import com.example.trelloproject.card.entity.QManager;
+import com.example.trelloproject.list.entity.QBoardList;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.example.trelloproject.board.entity.QBoard.board;
-import static com.example.trelloproject.card.entity.QCard.card;
-import static com.example.trelloproject.card.entity.QManager.manager;
-import static com.example.trelloproject.user.entity.QUser.user;
 
 
 @Repository
@@ -29,45 +24,42 @@ public class CardRepositoryImpl implements CardCustomRepository {
     }
 
     @Override
-    public List<Card> searchCard(String title, String description,LocalDateTime endAt, String name) {
+    public List<Card> searchCard(String title, String description, LocalDateTime endAt, String managerName, Long boardId) {
 
-//        return jpaQueryFactory
-//                .selectFrom(card)
-//                .leftJoin(card.managers, manager)
-//
-//                .where(titleEq(title), descriptionEq(description),endAtEq(endAt))
-//                .fetch();
-//    }
+        QCard card = QCard.card;
+        QManager manager = QManager.manager;
+        QBoardList boardList = QBoardList.boardList;
 
-        JPAQuery<Card> query = jpaQueryFactory
-                .selectFrom(card);
-//                .leftJoin(card.managers, manager);
-
-// managerName이 null이 아닐 경우에만 on 조건 추가
-//        if (name != null) {
-//            query.on(manager.managerName.eq(name));
-//        }
-
-        return query
+        return jpaQueryFactory
+                .selectFrom(card)
+                .leftJoin(card.managers, manager).fetchJoin()
+                .join(card.boardList, boardList).fetchJoin()
                 .where(
                         titleEq(title),
                         descriptionEq(description),
-                        endAtEq(endAt)
+                        endAtEq(endAt),
+                        boardIdEq(boardId),
+                        managerNameEq(managerName)
                 )
                 .fetch();
     }
-
     private BooleanExpression titleEq(String title) {
-        return title != null ? card.title.eq(title) : null;
+        return title != null ? QCard.card.title.eq(title) : null;
     }
+
     private BooleanExpression descriptionEq(String description) {
-        return description != null ? card.description.eq(description) : null;
+        return description != null ? QCard.card.description.eq(description) : null;
     }
-    private BooleanExpression endAtEq(LocalDateTime endAt){
-        return endAt != null ? card.endAt.eq(endAt) : null;
+
+    private BooleanExpression endAtEq(LocalDateTime endAt) {
+        return endAt != null ? QCard.card.endAt.eq(endAt) : null;
     }
-    // managerName 조건 (on 절에서 사용)
+
     private BooleanExpression managerNameEq(String managerName) {
-        return managerName != null ? manager.managerName.eq(managerName) : null;
+        return managerName != null ? QManager.manager.managerName.eq(managerName) : null;
+    }
+
+    private BooleanExpression boardIdEq(Long boardId) {
+        return boardId != null ? QBoard.board.id.eq(boardId) : null;
     }
 }

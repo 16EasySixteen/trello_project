@@ -48,7 +48,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         Workspace newWorkspace = workspaceRepository.save(workspace);
 
         // 추가 사항
-        userWorkspaceService.createUserWorkspace(findUser.getId(), workspace.getWorkspaceId(), "temp", MemberRole.WSADMIN);
+        userWorkspaceService.createUserWorkspace(findUser.getId(), workspace.getWorkspaceId(), "ADMIN", MemberRole.WSADMIN);
 
         return new WorkspaceResponseDto(
                 newWorkspace.getWorkspaceId(),
@@ -65,9 +65,11 @@ public class WorkspaceServiceImpl implements WorkspaceService {
      * @return 워크스페이스 리스트
      */
     @Override
-    public List<WorkspaceFindResponseDto> getAllWorkspace() {
+    public List<WorkspaceFindResponseDto> getAllWorkspace(Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User findUser = userDetails.getUser();
 
-        List<Workspace> workspaces = workspaceRepository.findAll();
+        List<Workspace> workspaces = workspaceRepository.findByUserId(findUser.getId());
         if(workspaces.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"워크 스페이스를 찾을 수 없습니다.");
         }
@@ -121,6 +123,10 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Transactional
     @Override
     public WorkspaceInviteResponseDto inviteWorkspace(Authentication authentication, Long workspaceId, WorkspaceInviteRequestDto requestDto) {
+        // 로그인한 유저
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User loginUser = userDetails.getUser();
+
         // 워크 스페이스 찾음
         Workspace findWorkspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"워크스페이스를 찾을 수 없습니다."));
@@ -128,6 +134,12 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         // 초대할 유저 조회
         User findUser = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"사용자를 찾을 수 없습니다."));
+
+        // 본인한테는 초대할 수 없음
+        if(loginUser.getId().equals(findUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"잘못된 요청입니다.");
+        }
+
 
         UserWorkspace newWorkspace = new UserWorkspace("INVITE", requestDto.getMemberRole(),findUser,findWorkspace);
         UserWorkspace newUserWorkspace = userWorkspaceRepository.save(newWorkspace);

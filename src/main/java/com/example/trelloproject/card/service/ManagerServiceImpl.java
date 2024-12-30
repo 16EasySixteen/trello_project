@@ -26,23 +26,28 @@ public class ManagerServiceImpl implements ManagerService {
         this.userRepository = userRepository;
     }
 
-    public AddManagerResponseDto createManager(Long cardId, Long userId, AddManagerRequestDto addManagerRequestDto) {
+    public AddManagerResponseDto createManager(Long cardId, AddManagerRequestDto addManagerRequestDto) {
 
         Card card = cardRepository.findById(cardId).orElseThrow(
                 ()-> new ResponseStatusException(HttpStatus.NOT_FOUND)
         );
-        User user = userRepository.findById(userId).orElseThrow(
+        User user = userRepository.findById(addManagerRequestDto.getUserId()).orElseThrow(
                 ()-> new ResponseStatusException(HttpStatus.NOT_FOUND)
         );
 
-        Manager manager = new Manager(addManagerRequestDto.getManagerName(), user, card);
+        Manager manager = new Manager(user, card);
 
         Manager savedManager = managerRepository.save(manager);
 
-        return new AddManagerResponseDto(savedManager.getId(), savedManager.getManagerName());
+        return new AddManagerResponseDto(
+                savedManager.getId(),
+                savedManager.getManagerName(),
+                savedManager.getCreatedAt(),
+                savedManager.getUpdatedAt());
     }
 
     @Override
+    @Transactional
     public void deleteManager(Long managerId) {
 
         Manager findManager = managerRepository.findById(managerId).orElseThrow(

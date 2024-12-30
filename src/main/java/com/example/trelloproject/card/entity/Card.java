@@ -1,8 +1,9 @@
 package com.example.trelloproject.card.entity;
 
+import com.example.trelloproject.common.entity.CreateAndUpdateDateEntity;
 import com.example.trelloproject.S3.Image;
+import com.example.trelloproject.comment.entity.Comment;
 import com.example.trelloproject.list.entity.BoardList;
-import com.example.trelloproject.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table
-public class Card {
+public class Card extends CreateAndUpdateDateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +26,7 @@ public class Card {
     private String description;
 
     private LocalDateTime endAt;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "list_id")
@@ -38,8 +40,8 @@ public class Card {
     private List<Manager> managers = new ArrayList<>();
 
 
-//    @OneToMany(mappedBy = "card", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-//    private List<Comment> comments;
+    @OneToMany(mappedBy = "card", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 
     public Card(){}
 
@@ -59,11 +61,5 @@ public class Card {
     }
     public void setEndAt(LocalDateTime endAt) {
         this.endAt = endAt;
-    }
-    public void setFileList(List<AddFile> fileList){
-        this.fileList = fileList;
-    }
-    public void setManagerList(List<Manager> managers) {
-        this.managers = managers;
     }
 }

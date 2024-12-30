@@ -1,11 +1,9 @@
 package com.example.trelloproject.card.dto.cardCreate;
 
-import com.example.trelloproject.card.entity.AddFile;
-import com.example.trelloproject.card.entity.Manager;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Getter
 public class CardCreateRequestDto {

@@ -35,36 +35,38 @@ public class WorkspaceController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<WorkspaceFindResponseDto>> getAllWorkspace() {
-        List<WorkspaceFindResponseDto> responseDtos = workspaceService.getAllWorkspace();
+    public ResponseEntity<List<WorkspaceFindResponseDto>> getAllWorkspace(
+            Authentication authentication
+    ) {
+        List<WorkspaceFindResponseDto> responseDtos = workspaceService.getAllWorkspace(authentication);
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
     /**
      * 워크스페이스 업데이트 API
-     * @param id
+     * @param workdspaceId
      * @param requestDto
      * @return
      */
-    @PatchMapping("/{id}")
+    @PatchMapping("/{workdspaceId}")
     public ResponseEntity<WorkspaceResponseDto> updateWorkspace(
-            @PathVariable Long id,
+            @PathVariable Long workdspaceId,
             @RequestBody WorkspaceRequestDto requestDto
     ){
-        WorkspaceResponseDto responseDto = workspaceService.updateWorkspace(id, requestDto);
+        WorkspaceResponseDto responseDto = workspaceService.updateWorkspace(workdspaceId, requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     /**
      *  워크스페이스 삭제 API
-     * @param id
+     * @param workdspaceId
      * @return
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{workspaceId}")
     public ResponseEntity<String> deleteWorkspace(
-            @PathVariable Long id
+            @PathVariable Long workdspaceId
     ){
-        workspaceService.deleteWorkspace(id);
+        workspaceService.deleteWorkspace(workdspaceId);
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 

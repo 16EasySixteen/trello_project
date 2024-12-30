@@ -2,7 +2,9 @@ package com.example.trelloproject.card.controller;
 
 import com.example.trelloproject.card.dto.cardCreate.CardCreateRequestDto;
 import com.example.trelloproject.card.dto.cardCreate.CardCreateResponseDto;
+import com.example.trelloproject.card.dto.cardFind.CardFindOneResponseDto;
 import com.example.trelloproject.card.dto.cardFind.CardFindResponseDto;
+import com.example.trelloproject.card.dto.cardFind.CardSearchResponseDto;
 import com.example.trelloproject.card.dto.cardUpdate.CardUpdateRequestDto;
 import com.example.trelloproject.card.dto.cardUpdate.CardUpdateResponseDto;
 import com.example.trelloproject.card.service.CardService;
@@ -43,7 +45,7 @@ public class CardController {
 
     // 카드 단건 조회
     @GetMapping("/cards/{cardId}")
-    public ResponseEntity<CardFindResponseDto> findCard(
+    public ResponseEntity<CardFindOneResponseDto> findCard(
             @PathVariable Long cardId
     ) {
         return new ResponseEntity<>(cardService.getCard(cardId), HttpStatus.OK);
@@ -61,13 +63,13 @@ public class CardController {
 
     //카드 검색
     @GetMapping("/cards")
-    public ResponseEntity<List<CardFindResponseDto>> searchCards(
-            @RequestParam (required = false)String title,
-            @RequestParam (required = false)String description,
-            @RequestParam (required = false)LocalDateTime endAt,
-            @RequestParam (required = false)String userName,
-            @RequestParam (required = false)Long boardId){
-        List<CardFindResponseDto> findCards = cardService.searchAndConvertCard(title, description, endAt, userName, boardId);
+    public ResponseEntity<List<CardSearchResponseDto>> searchCards(
+            @RequestParam (required = false) String title,
+            @RequestParam (required = false) String description,
+            @RequestParam (required = false) LocalDateTime endAt,
+            @RequestParam (required = false) String managerName,
+            @RequestParam (required = false) Long boardId){
+        List<CardSearchResponseDto> findCards = cardService.searchAndConvertCard(title, description, endAt, managerName, boardId);
         return new ResponseEntity<>(findCards, HttpStatus.OK);
     }
 

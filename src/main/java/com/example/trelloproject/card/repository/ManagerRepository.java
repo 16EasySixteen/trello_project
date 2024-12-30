@@ -1,6 +1,5 @@
 package com.example.trelloproject.card.repository;
 
-import com.example.trelloproject.card.entity.AddFile;
 import com.example.trelloproject.card.entity.Manager;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/cards/{cardId}/managers")
+@RequestMapping("/workspaces/{workspaceId}/cards/{cardId}/managers")
 public class AddManagerController {
 
     private ManagerService managerService;
@@ -17,13 +17,12 @@ public class AddManagerController {
         this.managerService = managerService;
     }
 
-    @PostMapping("/{userId}")
+    @PostMapping
     public ResponseEntity<AddManagerResponseDto> CreateManager(
             @PathVariable Long cardId,
-            @PathVariable Long userId,
-            @RequestPart(value = "addManagerRequestDto" ,required = false) AddManagerRequestDto addManagerRequestDto
+            @RequestBody AddManagerRequestDto addManagerRequestDto
     ) {
-        return new ResponseEntity<>(managerService.createManager(cardId, userId, addManagerRequestDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(managerService.createManager(cardId, addManagerRequestDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{managerId}")
