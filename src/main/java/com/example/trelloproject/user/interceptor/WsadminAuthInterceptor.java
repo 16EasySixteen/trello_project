@@ -31,6 +31,7 @@ public class WsadminAuthInterceptor implements HandlerInterceptor {
 
         String token = request.getHeader("Authorization");
 
+        // 해당 토큰이 만료되었는지 확인
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
             log.info("재가공한 토큰 : {}", token);
@@ -38,16 +39,23 @@ public class WsadminAuthInterceptor implements HandlerInterceptor {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
         }
 
+        // 해당 토큰이 유효하면 로직 실행
         if (jwtProvider.validateToken(token)) {
             String username = jwtProvider.getUsername(token);
 
-            // memberRole이 null값일 때
             User user = userRepository.findByEmail(username).orElseThrow(() -> new ForbiddenException("접근 권한이 없습니다."));
             Long workspaceId = PathVariableExtractor.extractPathVariable(request, "workspaceId");
 
             List<UserWorkspace> userWorkspace = user.getUserWorkspace().stream().filter(uw -> uw.getWorkspace().getWorkspaceId().equals(workspaceId)).toList();
+
+            // memberRole이 null값일 때
+            if (userWorkspace.isEmpty()) {
+                throw new ForbiddenException("접근 권한이 없습니다.");
+            }
+
             MemberRole memberRole = userWorkspace.get(0).getMemberRole();
 
+            // 권한에 따라 접근여부 결정
             if (memberRole.equals(MemberRole.WSADMIN)) {
                 return true;
             }
